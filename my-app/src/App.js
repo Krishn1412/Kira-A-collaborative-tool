@@ -1,10 +1,15 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
-
+import LandingPage from './components/Landing_page'
+import Login1 from './components/Login1'
+import EMD from './components/EM_dashboad'
+import Add from './components/Add_new_mem'
+import PMD from './components/PM_dashboard'
+import At from './components/Add_ticket'
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -17,7 +22,9 @@ function App() {
         >
           Learn React
         </a>
-      </header>
+      </header> */}
+      {/* <LandingPage/> */}
+      <PMD/>
     </div>
   );
 }
