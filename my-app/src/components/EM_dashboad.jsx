@@ -10,6 +10,9 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components";
+import "../styles/add_new.css"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -134,90 +137,194 @@ const Card = styled.div`
   }
 `;
 
+const Dashboard = () => (
+  <Container>
+    <CardWrapper>
+      <Card>
+        <h3 className="card-title">Card 1</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div className="card-link">Card Link</div>
+      </Card>
+    </CardWrapper>
+    <CardWrapper>
+      <Card>
+        <h3 className="card-title">Card 2</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div className="card-link">Card Link</div>
+      </Card>
+    </CardWrapper>
+    <CardWrapper>
+      <Card>
+        <h3 className="card-title">Card 3</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div className="card-link">Card Link</div>
+      </Card>
+    </CardWrapper>
+    <CardWrapper>
+      <Card>
+        <h3 className="card-title">Card 3</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div className="card-link">Card Link</div>
+      </Card>
+    </CardWrapper>
+    <CardWrapper>
+      <Card>
+        <h3 className="card-title">Card 3</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div className="card-link">Card Link</div>
+      </Card>
+    </CardWrapper>
+  </Container>
+);
+
+const AddMem = () => (
+  <Container>
+      <div>
+    <Dropdown />
+    <Dropdown1 />
+    <Table />
+    </div>
+
+    </Container>
+);
+
+
+const Table = () => {
+  const [data, setData] = useState([
+    { id: 1, name: "John", age: 25 },
+    { id: 2, name: "Jane", age: 30 },
+    { id: 3, name: "Bob", age: 35 },
+  ]);
+
+  return (
+    <table className="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Age</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((item) => (
+          <tr key={item.id}>
+            <td>{item.id}</td>
+            <td>{item.name}</td>
+            <td>{item.age}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+const Dropdown = () => {
+  const [selectedValue, setSelectedValue] = useState("");
+
+  const handleSelectChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
+
+  return (
+    <select  className="dropdown" value={selectedValue} onChange={handleSelectChange}>
+      <option value="">Select a joinee</option>
+      <option value="option1">Option 1</option>
+      <option value="option2">Option 2</option>
+      <option value="option3">Option 3</option>
+    </select>
+  );
+};
+const Dropdown1 = () => {
+  const [selectedValue, setSelectedValue] = useState("");
+
+  const handleSelectChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
+
+  return (
+    <select  className="dropdown" value={selectedValue} onChange={handleSelectChange}>
+      <option value="">Select a team</option>
+      <option value="option1">Option 1</option>
+      <option value="option2">Option 2</option>
+      <option value="option3">Option 3</option>
+    </select>
+  );
+};
 
 const EMD = () => {
   const classes = useStyles();
   const [isOpened, setIsOpened] = useState(false);
 
   return (
+    <BrowserRouter>
     <div className={classes.root}>
-      <AppBar className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            onClick={() => setIsOpened(!isOpened)}
-            className={classes.icon}
+         <AppBar className={classes.appBar}>
+           <Toolbar>
+             <IconButton
+              color="inherit"
+              onClick={() => setIsOpened(!isOpened)}
+              className={classes.icon}
+            >
+              {isOpened ? (
+                <ChevronLeftIcon />
+              ) : (
+                <MenuIcon />
+              )}
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              Engineering Manager Dashboard
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Toolbar />
+        <div className={classes.container}>
+          <Drawer
+            variant="permanent"
+            classes={{
+              paper: clsx(classes.drawer, {
+                [classes.closed]: !isOpened,
+                [classes.opened]: isOpened,
+              }),
+            }}
           >
-            {isOpened ? <ChevronLeftIcon /> : <MenuIcon />}
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            Engineering Manger Dashboard
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Toolbar />
-      <div className={classes.container}>
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: clsx(classes.drawer, {
-              [classes.closed]: !isOpened,
-              [classes.opened]: isOpened,
-            }),
-          }}
-        >
-          <Button className={classes.button}>
-            Dashboard
-          </Button>
-          <Button className={classes.button}>
-            Add new joinee
-          </Button>
-        </Drawer>
-        <main className={classes.main}>
-          <Container>
-            <CardWrapper>
-              <Card>
-                <h3 className="card-title">Card 1</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <div className="card-link">Card Link</div>
-              </Card>
-            </CardWrapper>
-            <CardWrapper>
-              <Card>
-                <h3 className="card-title">Card 2</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <div className="card-link">Card Link</div>
-              </Card>
-            </CardWrapper>
-            <CardWrapper>
-              <Card>
-                <h3 className="card-title">Card 3</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <div className="card-link">Card Link</div>
-              </Card>
-            </CardWrapper>
-            <CardWrapper>
-              <Card>
-                <h3 className="card-title">Card 3</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <div className="card-link">Card Link</div>
-              </Card>
-            </CardWrapper>
-            <CardWrapper>
-              <Card>
-                <h3 className="card-title">Card 3</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <div className="card-link">Card Link</div>
-              </Card>
-            </CardWrapper>
-            
-          </Container>
-        </main>
+            <Button
+              className={classes.button}
+              component={Link}
+              to="/"
+              onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
+            >
+              Dashboard
+            </Button>
+            <Button
+              className={classes.button}
+              component={Link}
+              to="/add_mem"
+              onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
+            >
+              Add member
+            </Button>
+            <Button
+              className={classes.button}
+              component={Link}
+              to="/add_team"
+              onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
+            >
+              Add new Team
+            </Button>
+          </Drawer>
+          <main className={classes.main}>
+          <Outlet />
+      <Routes>
+          <Route path="/" element={<Dashboard/>} />
+          <Route path="/add_mem" element={<AddMem />} />
+      </Routes>
+      </main>
+        </div>
+        <div className={classes.footer}>
+          <Typography variant="h6">Footer</Typography>
+        </div>
       </div>
-      <div className={classes.footer}>
-        <Typography variant="h6">Footer</Typography>
-      </div>
-    </div>
+    </BrowserRouter>   
   );
 };
 

@@ -10,9 +10,9 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components";
-// import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
-import { Switch, Route, Router, Link} from "react-router-dom";
-
+import AssignTicket from "./Assign_ticket"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     textAlign: "center",
@@ -137,18 +137,17 @@ const Card = styled.div`
 `;
 
 const InputForm = () => {
-    return (
-      <div className="input-form">
-        <input type="text" className="input" placeholder="Name" />
-        <textarea className="description-input" placeholder="Description"></textarea>
-        <button className="submit-button">Submit</button>
-      </div>
-    );
-  };
+  return (
+    <div className="input-form">
+      <input type="text" className="input" placeholder="Name" />
+      <textarea className="description-input" placeholder="Description"></textarea>
+      <button className="submit-button">Submit</button>
+    </div>
+  );
+};
 
-
-  const Dashboard = () => (
-    <Container>
+const Dashboard = () => (
+  <Container>
     <CardWrapper>
       <Card>
         <h3 className="card-title">Card 1</h3>
@@ -184,40 +183,42 @@ const InputForm = () => {
         <div className="card-link">Card Link</div>
       </Card>
     </CardWrapper>
-    
   </Container>
-  );
-  
-  const AddTicket = () => (
-    <div>
-    <div style={{marginTop: '30px'}}>
-          <Typography variant="h6" >
-            Adding a ticket
-          </Typography>
-          </div>
-          <Container>
-            <div>
-            <InputForm />
-            </div>
-          </Container>
+);
+
+const AddTicket = () => (
+  <div>
+    <div style={{ marginTop: "30px" }}>
+      <Typography variant="h6">Adding a ticket</Typography>
     </div>
-  );
+    <Container>
+      <div>
+        <InputForm />
+      </div>
+    </Container>
+  </div>
+);
+
 
 const PMD = () => {
   const classes = useStyles();
   const [isOpened, setIsOpened] = useState(false);
 
   return (
-    <Router>
-      <div className={classes.root}>
-        <AppBar className={classes.appBar}>
-          <Toolbar>
-            <IconButton
+    <BrowserRouter>
+    <div className={classes.root}>
+         <AppBar className={classes.appBar}>
+           <Toolbar>
+             <IconButton
               color="inherit"
               onClick={() => setIsOpened(!isOpened)}
               className={classes.icon}
             >
-              {isOpened ? <ChevronLeftIcon /> : <MenuIcon />}
+              {isOpened ? (
+                <ChevronLeftIcon />
+              ) : (
+                <MenuIcon />
+              )}
             </IconButton>
             <Typography variant="h6" className={classes.title}>
               Product Manager Dashboard
@@ -239,34 +240,41 @@ const PMD = () => {
               className={classes.button}
               component={Link}
               to="/"
-              onClick={() => {setIsOpened(false)}}
+              onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
             >
               Dashboard
             </Button>
             <Button
               className={classes.button}
               component={Link}
-              to="/add-ticket"
-              onClick={() => setIsOpened(false)}
+              to="/add_ticket"
+              onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
             >
               Add new ticket
             </Button>
-            <Button className={classes.button}>Assign tasks</Button>
+            <Button
+              className={classes.button}
+              component={Link}
+              to="/ass_ticket"
+              onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
+            >
+              Assign Tickets
+            </Button>
           </Drawer>
           <main className={classes.main}>
-            <Container>
-              <Switch>
-                <Route exact path="/" component={Dashboard} />
-                <Route path="/add-ticket" component={AddTicket} />
-              </Switch>
-            </Container>
-          </main>
+          <Outlet />
+      <Routes>
+          <Route path="/" element={<Dashboard/>} />
+          <Route path="/add_ticket" element={<AddTicket />} />
+          <Route path="/ass_ticket" element={<AssignTicket />} />
+      </Routes>
+      </main>
         </div>
         <div className={classes.footer}>
           <Typography variant="h6">Footer</Typography>
         </div>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 };
 
