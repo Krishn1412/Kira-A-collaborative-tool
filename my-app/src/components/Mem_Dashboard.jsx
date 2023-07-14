@@ -14,6 +14,7 @@ import AssignTicket from "./Assign_ticket"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Outlet, Link } from "react-router-dom";
 import Board from "./Simp_view";
+import Board1 from "./Drag_drop";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -144,7 +145,6 @@ const InputForm = () => {
     <div className="input-form">
       <input type="text" className="input" placeholder="Name" />
       <textarea className="description-input" placeholder="Description"></textarea>
-      <input type="text" className="input" placeholder="Priority" />
       <button className="submit-button">Submit</button>
     </div>
   );
@@ -204,7 +204,7 @@ const AddTicket = () => (
 );
 
 
-const PMD = () => {
+const MMD = () => {
   const classes = useStyles();
   const [isOpened, setIsOpened] = useState(false);
 
@@ -225,7 +225,7 @@ const PMD = () => {
               )}
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              Product Manager Dashboard
+              Member Dashboard
             </Typography>
           </Toolbar>
         </AppBar>
@@ -251,26 +251,17 @@ const PMD = () => {
             <Button
               className={classes.button}
               component={Link}
-              to="/add_ticket"
+              to="/upd_ticket"
               onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
             >
-              Add new ticket
-            </Button>
-            <Button
-              className={classes.button}
-              component={Link}
-              to="/ass_ticket"
-              onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
-            >
-              Assign Tickets
+              Update Tickets
             </Button>
           </Drawer>
           <main className={classes.main}>
           <Outlet />
       <Routes>
           <Route path="/" element={<Board/>} />
-          <Route path="/add_ticket" element={<AddTicket />} />
-          <Route path="/ass_ticket" element={<AssignTicket />} />
+          <Route path="/upd_ticket" element={<Board1 />} />
       </Routes>
       </main>
         </div>
@@ -282,4 +273,4 @@ const PMD = () => {
   );
 };
 
-export default PMD;
+export default MMD;

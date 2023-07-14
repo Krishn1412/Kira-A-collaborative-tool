@@ -1,10 +1,11 @@
 // import logo from './logo.svg';
 import './App.css';
 import LandingPage from './components/Landing_page'
-import Login1 from './components/Login1'
 import EMD from './components/EM_dashboad'
 import Add from './components/Add_new_mem'
 import PMD from './components/PM_dashboard'
+import MMD from './components/Mem_Dashboard'
+import Login1 from './components/Pm_login'
 import A from './components/A'
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
         </a>
       </header> */}
       {/* <LandingPage/> */}
-      <PMD/>
+      {/* <PMD/> */}
+      <Login1/>
     </div>
   );
 }

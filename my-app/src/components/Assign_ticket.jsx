@@ -16,6 +16,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Outlet, Link } from "react-router-dom";
+import "../styles/add_new.css"
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -94,6 +96,23 @@ const CardWrapper = styled.div`
     max-width: 33.33%;
   }
 `;
+
+const Dropdown = () => {
+  const [selectedValue, setSelectedValue] = useState("");
+
+  const handleSelectChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
+
+  return (
+    <select  className="dropdown" value={selectedValue} onChange={handleSelectChange}>
+      <option value="">Select a joinee</option>
+      <option value="option1">Option 1</option>
+      <option value="option2">Option 2</option>
+      <option value="option3">Option 3</option>
+    </select>
+  );
+};
 
 const Card = styled.div`
   padding: 16px;
@@ -179,6 +198,8 @@ const TicketPage = () => {
       <h2>Ticket {ticket.id}</h2>
       <h3>{ticket.title}</h3>
       <p>{ticket.description}</p>
+      <p>{ticket.priority}</p>
+      <Dropdown/>
       {/* Display ticket details */}
     </div>
   );
@@ -204,6 +225,7 @@ const Ast = () => {
       {tickets.map((ticket) => (
         <TicketCard key={ticket.id} ticket={ticket} />
       ))}
+      
     </Container>
   );
 };

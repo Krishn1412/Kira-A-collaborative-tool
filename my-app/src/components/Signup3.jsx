@@ -19,7 +19,7 @@ async function validate(refs, form) {
   return true;
 }
 
-export default function Login(props) {
+export default function Signup(props) {
   const { setAuthType } = props;
   const [form, setForm] = useState({});
   const [showPassword, setShowPassword] = useState();
@@ -51,8 +51,35 @@ export default function Login(props) {
             </Avatar>
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>Log In</h2>
+            <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>Sign Up</h2>
           </div>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="firstName"
+            label="First Name"
+            name="firstName"
+            autoComplete="firstName"
+            autoFocus
+            value={get(form, "firstName", "")}
+            onChange={(event) => updateForm("firstName", event.target.value)}
+            inputRef={(ref) => (refs.current.firstName = ref)}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="lastName"
+            label="Last Name"
+            name="lastName"
+            autoComplete="lastName"
+            value={get(form, "lastName", "")}
+            onChange={(event) => updateForm("lastName", event.target.value)}
+            inputRef={(ref) => (refs.current.lastName = ref)}
+          />
           <TextField
             variant="outlined"
             margin="normal"
@@ -62,7 +89,6 @@ export default function Login(props) {
             label="Email"
             name="email"
             autoComplete="email"
-            autoFocus
             value={get(form, "email", "")}
             onChange={(event) => updateForm("email", event.target.value)}
             inputRef={(ref) => (refs.current.email = ref)}
@@ -76,7 +102,7 @@ export default function Login(props) {
             label="Password"
             type={showPassword ? "text" : "password"}
             id="password"
-            autoComplete="current-password"
+            autoComplete="new-password"
             value={get(form, "password", "")}
             onChange={(event) => updateForm("password", event.target.value)}
             inputRef={(ref) => (refs.current.password = ref)}
@@ -103,30 +129,19 @@ export default function Login(props) {
             color="primary"
             style={{ marginTop: "8px" }}
           >
-            Log In
+            Sign Up
           </Button>
         </form>
         <div>
           <Button
-            onClick={() => console.log("Forgot Password")}
+            onClick={() => setAuthType("login")}
             style={{
               textTransform: "initial",
               marginTop: "16px",
               color: indigo[500]
             }}
           >
-            Forgot Password?
-          </Button>
-        </div>
-        <div>
-          <Button
-            onClick={() => setAuthType("signup")}
-            style={{
-              textTransform: "initial",
-              color: indigo[500]
-            }}
-          >
-            Don't have an account?
+            Already have an account?
           </Button>
         </div>
         <div style={{ marginTop: "16px" }}>{JSON.stringify(form, null, 2)}</div>
@@ -135,6 +150,6 @@ export default function Login(props) {
   );
 }
 
-Login.propTypes = {
+Signup.propTypes = {
   setAuthType: PropTypes.func
 };

@@ -41,17 +41,17 @@ const initialData = {
   columns: {
     column1: {
       id: 'column1',
-      title: 'Column 1',
+      title: 'Not Started',
       taskIds: ['task1', 'task2'],
     },
     column2: {
       id: 'column2',
-      title: 'Column 2',
+      title: 'In Progress',
       taskIds: ['task3'],
     },
     column3: {
       id: 'column3',
-      title: 'Column 3',
+      title: 'Completed',
       taskIds: ['task4'],
     },
   },
