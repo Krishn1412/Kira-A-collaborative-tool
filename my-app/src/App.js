@@ -24,9 +24,9 @@ function App() {
           Learn React
         </a>
       </header> */}
-      {/* <LandingPage/> */}
+      <LandingPage/>
       {/* <PMD/> */}
-      <Login1/>
+      {/* <Login1/> */}
     </div>
   );
 }

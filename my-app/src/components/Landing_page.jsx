@@ -1,5 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import { createBrowserHistory } from 'history';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
+import EM_login from "./EM_login";
+import PM_login from "./Pm_login";
+import Mem_login from "./Mem_login";
+const history = createBrowserHistory();
 
 // variables
 const darkPurple = '#00106a';
@@ -256,70 +263,105 @@ const Footer = styled.footer`
   }
 `;
 
+const Landing = () => (
+      <div>
+      <Nav>
+      <div className="logo">
+        <div className="arrow-down"></div>
+      </div>
+      <ul>
+        <li>Services</li>
+        <li>Products</li>
+        <li>FAQs</li>
+        <li>Contact</li>
+      </ul>
+    </Nav>
+    <div className="kk">
+    <Banner>
+      <div className="container">
+        <div className="banner-text">
+          <h1>Kira</h1>
+          <p>
+            <strong>
+              A great Collaborative tool for managing your bussiness
+            </strong>{' '}
+            Our tools make it simple to track how your teams are performing
+            and help you to respond quickly if there is a problem
+          </p>
+          <Link to="/EM_login">
+            <button className='banner-button'>EM</button>
+          </Link>
+          <Link to="/PM_login">
+            <button className='banner-button'>PM</button>
+          </Link>
+          <Link to="/Mem_login">
+            <button className='banner-button'>Team Member</button>
+          </Link>
+        </div>
+      </div>
+      <img
+        className="banner-image"
+        src="https://preview.ibb.co/bMi5Y6/banner_img.png"
+        alt="monitoring"
+      />
+    </Banner>
+    <Container>
+    {cardsData.map((card, index) => (
+      <CardWrapper key={index} className="mb-30">
+        <Card>
+          <img className="card-icon" src={card.icon} alt={card.title} />
+          <h3 className="card-title">{card.title}</h3>
+          <p className="card-text">{card.text}</p>
+          <a className="card-link" href={card.link}>
+            Learn more
+          </a>
+        </Card>
+      </CardWrapper>
+    ))}
+    </Container>
+    <Footer>
+      <div className="container">
+        <div className="row">
+          <div className="col-md-4">
+            <ul>
+              <li>Footer Link</li>
+              <li>Footer Link</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </Footer>
+    </div>
+    <Outlet/>
+    </div>
+);
+
+
 const App = () => {
+  const handleit1 = () => {
+    // Navigate to a different page
+    window.location.href = 'https://www.example.com';
+  };
+  const handleit2 = () => {
+    // Navigate to a different page
+    history.push('./Pm_login.jsx');
+  };
+  const handleit3 = () => {
+    // Navigate to a different page
+    history.push('./Mem_login.jsx');
+  };
   return (
     <>
-      <Nav>
-        <div className="logo">
-          <div className="arrow-down"></div>
-        </div>
-        <ul>
-          <li>Services</li>
-          <li>Products</li>
-          <li>FAQs</li>
-          <li>Contact</li>
-        </ul>
-      </Nav>
-      <div className="kk">
-      <Banner>
-        <div className="container">
-          <div className="banner-text">
-            <h1>Kira</h1>
-            <p>
-              <strong>
-                A great Collaborative tool for managing your bussiness
-              </strong>{' '}
-              Our tools make it simple to track how your teams are performing
-              and help you to respond quickly if there is a problem
-            </p>
-            <button className='banner-button'>EM</button>
-            <button className='banner-button'>PM</button>
-            <button className='banner-button'>Team Member</button>
-          </div>
-        </div>
-        <img
-          className="banner-image"
-          src="https://preview.ibb.co/bMi5Y6/banner_img.png"
-          alt="monitoring"
-        />
-      </Banner>
-      <Container>
-      {cardsData.map((card, index) => (
-        <CardWrapper key={index} className="mb-30">
-          <Card>
-            <img className="card-icon" src={card.icon} alt={card.title} />
-            <h3 className="card-title">{card.title}</h3>
-            <p className="card-text">{card.text}</p>
-            <a className="card-link" href={card.link}>
-              Learn more
-            </a>
-          </Card>
-        </CardWrapper>
-      ))}
-    </Container>
-      <Footer>
-        <div className="container">
-          <div className="row">
-            <div className="col-md-4">
-              <ul>
-                <li>Footer Link</li>
-                <li>Footer Link</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </Footer>
-      </div>
+    <BrowserRouter>
+      
+      
+      <Routes>
+        <Route exact path="/" element={<Landing />} />
+          <Route path="/EM_login" element={<EM_login />} />
+          <Route path="/PM_login" element={<PM_login />} />
+          <Route path="/Mem_login" element={<Mem_login />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 };

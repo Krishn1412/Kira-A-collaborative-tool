@@ -187,7 +187,26 @@ const AddMem = () => (
 
     </Container>
 );
+const InputForm = () => {
+  return (
+    <div className="input-form">
+      <Dropdown />
+      <Dropdown1 />
+      <input type="text" className="input" placeholder="Name" />
+      <button className="submit-button">Submit</button>
+    </div>
+  );
+};
+const AddTeam = () => (
+  <Container>
+      <div>
+    <div>
+        <InputForm />
+      </div>
+    </div>
 
+    </Container>
+);
 
 const Table = () => {
   const [data, setData] = useState([
@@ -317,6 +336,7 @@ const EMD = () => {
       <Routes>
           <Route path="/" element={<Dashboard/>} />
           <Route path="/add_mem" element={<AddMem />} />
+          <Route path="/add_team" element={<AddTeam />} />
       </Routes>
       </main>
         </div>

@@ -5,6 +5,7 @@ import { LockOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import { indigo, red } from "@mui/material/colors";
 import PropTypes from "prop-types";
 
+
 async function validate(refs, form) {
   for (const [attribute, ref] of Object.entries(refs.current)) {
     var errors;
