@@ -1,12 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { createBrowserHistory } from 'history';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Outlet, Link } from "react-router-dom";
-import EM_login from "./EM_login";
-import PM_login from "./Pm_login";
-import Mem_login from "./Mem_login";
-const history = createBrowserHistory();
 
 // variables
 const darkPurple = '#00106a';
@@ -263,7 +257,11 @@ const Footer = styled.footer`
   }
 `;
 
-const Landing = () => (
+
+
+const Landing = () => {
+  return (
+    <>
       <div>
       <Nav>
       <div className="logo">
@@ -325,7 +323,6 @@ const Landing = () => (
           <div className="col-md-4">
             <ul>
               <li>Footer Link</li>
-              <li>Footer Link</li>
             </ul>
           </div>
         </div>
@@ -334,36 +331,8 @@ const Landing = () => (
     </div>
     <Outlet/>
     </div>
-);
-
-
-const App = () => {
-  const handleit1 = () => {
-    // Navigate to a different page
-    window.location.href = 'https://www.example.com';
-  };
-  const handleit2 = () => {
-    // Navigate to a different page
-    history.push('./Pm_login.jsx');
-  };
-  const handleit3 = () => {
-    // Navigate to a different page
-    history.push('./Mem_login.jsx');
-  };
-  return (
-    <>
-    <BrowserRouter>
-      
-      
-      <Routes>
-        <Route exact path="/" element={<Landing />} />
-          <Route path="/EM_login" element={<EM_login />} />
-          <Route path="/PM_login" element={<PM_login />} />
-          <Route path="/Mem_login" element={<Mem_login />} />
-        </Routes>
-      </BrowserRouter>
     </>
   );
 };
 
-export default App;
+export default Landing;
