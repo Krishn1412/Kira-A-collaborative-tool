@@ -3,14 +3,53 @@ const ErrorHandler=require("../utils/errorHandler");
 const catchAsyncError= require("../middleware/catchAsyncErrors");
 const TeamMember = require("../models/teamMemberModel.js");
 const Team = require("../models/teamModel.js");
+const sendToken = require('../utils/jwtToken.js');
 
-exports.testingFunction= catchAsyncError(async(req,res,next)=>{
-    const id = req.body.id;
-    const em = await EngineeringManager.findById(id);
-    res.status(201).json({
-        successMessage:"It's working fine!",
-        saaleKaPassword: em.password,
-    })
+// exports.testingFunction= catchAsyncError(async(req,res,next)=>{
+//     const id = req.body.id;
+//     const em = await EngineeringManager.findById(id);
+//     res.status(201).json({
+//         successMessage:"It's working fine!",
+//         saaleKaPassword: em.password,
+//     })
+// });
+
+//login user
+exports.loginEM_User= catchAsyncError( async (req,res,next)=>{
+    
+  const {username,password} = req.body;
+
+  if(!username || !password){
+      // console.log("aya");
+      return next(new ErrorHandler("Please enter username and password",400));
+  }
+  
+  const userFound= await EngineeringManager.findOne({username: username}).select("+password");
+
+  if(!userFound){
+      return next(new ErrorHandler("Invalid username or password",400));
+  }
+  const isPasswordMatched= await userFound.comparePassword(password);
+
+  if(!isPasswordMatched){
+      return next(new ErrorHandler("Invalid username or password",400));
+  }
+  
+  sendToken(userFound,200,res);
+});
+
+
+//logout em user!!
+exports.logoutEM_User = catchAsyncError( async (req,res,next)=>{
+  res.cookie("token",null,{
+      expires: new Date(Date.now()),
+      httpOnly: true,
+  });
+
+  res.status(200).json({
+      success:true,
+      message:"Successfully logged out",
+  });
 });
 
 exports.createEngineeringManager = catchAsyncError(async(req,res,next)=>{

@@ -1,9 +1,11 @@
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncError = require("./catchAsyncErrors");
 const jwt= require("jsonwebtoken");
-const User= require("../models/usermodel");
+const EM= require("../models/emModel");
+const PM= require("../models/pmModel");
+const TM= require("../models/teamMemberModel");
 
-exports.isAuthUser= catchAsyncError( async (req,res,next)=>{
+exports.isAuthUser_EM= catchAsyncError( async (req,res,next)=>{
     const {token}= req.cookies;
 
     if(!token){
@@ -12,11 +14,36 @@ exports.isAuthUser= catchAsyncError( async (req,res,next)=>{
 
     const decodedData= jwt.verify(token, process.env.JWT_SECRET);
 
-    req.user = await User.findById(decodedData.id);
+    req.user = await EM.findById(decodedData.id);
 
     next();
 });
+exports.isAuthUser_PM= catchAsyncError( async (req,res,next)=>{
+    const {token}= req.cookies;
 
+    if(!token){
+        return next(new ErrorHandler("Please login to access this resource",400));
+    }
+
+    const decodedData= jwt.verify(token, process.env.JWT_SECRET);
+
+    req.user = await PM.findById(decodedData.id);
+
+    next();
+});
+exports.isAuthUser_TM= catchAsyncError( async (req,res,next)=>{
+    const {token}= req.cookies;
+
+    if(!token){
+        return next(new ErrorHandler("Please login to access this resource",400));
+    }
+
+    const decodedData= jwt.verify(token, process.env.JWT_SECRET);
+
+    req.user = await TM.findById(decodedData.id);
+
+    next();
+});
 exports.authorizeRoles = (...roles) =>{
 
     return (req,res,next)=>{

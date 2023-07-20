@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const jwt= require("jsonwebtoken");
 
 const teamMemSchema = new mongoose.Schema({
   name: {
@@ -24,4 +25,15 @@ const teamMemSchema = new mongoose.Schema({
     default: null,
   },
 });
+
+teamMemSchema.methods.comparePassword = async function(passwordEntered) {
+  return passwordEntered==this.password;
+};
+
+teamMemSchema.methods.getJWTToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRE,
+  });
+};
+
 module.exports = mongoose.model("TeamMember", teamMemSchema);
