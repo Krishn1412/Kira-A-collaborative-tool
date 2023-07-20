@@ -4,11 +4,26 @@ const ErrorHandler=require("../utils/errorHandler");
 const catchAsyncError= require("../middleware/catchAsyncErrors");
 const TeamMember= require("../models/teamMemberModel.js");
 
-exports.testingFunction= catchAsyncError(async(req,res,next)=>{
+exports.ViewAllTickets= catchAsyncError(async(req,res,next)=>{
+    const ticketCount= await Ticket.countDocuments();
+    
+    const tickets= await Ticket.find();
+    res.status(200).json({
+        success: true,
+        ticketCount,
+        tickets,
+    });
+});
 
-    res.status(201).json({
-        successMessage:"It's working fine!"
-    })
+exports.ViewUnassignedTickets= catchAsyncError(async(req,res,next)=>{
+    
+    const tickets = await Ticket.find({ teamMember: null });
+    const ticketCount = await Ticket.countDocuments({ teamMember: null });
+    res.status(200).json({
+        success: true,
+        ticketCount,
+        tickets,
+    });
 });
 
 exports.createTicket= catchAsyncError(async(req,res,next)=>{
