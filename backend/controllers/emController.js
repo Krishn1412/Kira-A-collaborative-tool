@@ -75,3 +75,15 @@ exports.assignTeam = catchAsyncError(async(req,res,next)=>{
     teamMem,
     });
 });
+
+
+exports.getAllTeamMembers = catchAsyncError( async (req,res,next)=>{
+  const teammembersCount= await TeamMember.countDocuments();
+    
+  const teammembers= await TeamMember.find();
+  res.status(200).json({
+      success: true,
+      teammembersCount,
+      teammembers,
+  });
+});
