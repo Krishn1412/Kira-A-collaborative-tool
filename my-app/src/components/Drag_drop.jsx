@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import styled from 'styled-components';
-
+import axios from 'axios';
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -103,6 +103,22 @@ const BoardView = () => {
 
     setData(newData);
   };
+   const [tickets, setTickets] = useState([]);
+  const url1 = "http://localhost:4000/api/v1/TeamMember/viewTickets";
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const response = await axios.post(url1);
+        setTickets(response.data.assignedTickets);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchTickets();
+  }, []);
 
   return (
     <Container>
@@ -116,6 +132,7 @@ const BoardView = () => {
             onDragOver={onDragOver}
             onDrop={(event) => onDrop(event, column.id)}
           >
+            
             <ColumnTitle>{column.title}</ColumnTitle>
             {tasks.map((task) => (
               <Card

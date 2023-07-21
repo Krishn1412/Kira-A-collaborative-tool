@@ -19,11 +19,11 @@ const teamMemSchema = new mongoose.Schema({
     ref: "Team",
     default: null,
   },
-  ticket: {
+  ticket: [{ // Update the field name to "tickets" and use an array of schema object IDs
     type: mongoose.Schema.ObjectId,
     ref: "Ticket",
     default: null,
-  },
+  }],
 });
 
 teamMemSchema.methods.comparePassword = async function(passwordEntered) {

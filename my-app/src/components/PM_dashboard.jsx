@@ -243,7 +243,7 @@ const PMD = () => {
             <Button
               className={classes.button}
               component={Link}
-              to="/"
+              to="/PM_dashboard"
               onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
             >
               Dashboard
@@ -266,12 +266,7 @@ const PMD = () => {
             </Button>
           </Drawer>
           <main className={classes.main}>
-          <Outlet />
-      <Routes>
-          <Route path="/" element={<Board/>} />
-          <Route path="/add_ticket" element={<AddTicket />} />
-          <Route path="/ass_ticket" element={<AssignTicket />} />
-      </Routes>
+          <Board/>
       </main>
         </div>
         <div className={classes.footer}>

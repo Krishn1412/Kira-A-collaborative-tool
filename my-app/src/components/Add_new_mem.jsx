@@ -11,6 +11,8 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components";
 import "../styles/add_new.css"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 
 const Table = () => {
     const [data, setData] = useState([
@@ -219,22 +221,40 @@ const EMD = () => {
       </AppBar>
       <Toolbar />
       <div className={classes.container}>
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: clsx(classes.drawer, {
-              [classes.closed]: !isOpened,
-              [classes.opened]: isOpened,
-            }),
-          }}
-        >
-          <Button className={classes.button}>
-            Dashboard
-          </Button>
-          <Button className={classes.button}>
-            Add new joinee
-          </Button>
-        </Drawer>
+      <Drawer
+            variant="permanent"
+            classes={{
+              paper: clsx(classes.drawer, {
+                [classes.closed]: !isOpened,
+                [classes.opened]: isOpened,
+              }),
+            }}
+          >
+            <Button
+              className={classes.button}
+              component={Link}
+              to="/EM_Dashboard"
+              onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
+            >
+              Dashboard
+            </Button>
+            <Button
+              className={classes.button}
+              component={Link}
+              to="/add_mem"
+              onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
+            >
+              Add member
+            </Button>
+            <Button
+              className={classes.button}
+              component={Link}
+              to="/add_team"
+              onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
+            >
+              Add new Team
+            </Button>
+          </Drawer>
         <main className={classes.main}>
           <Container>
                 <div>

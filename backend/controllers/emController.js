@@ -78,9 +78,9 @@ exports.assignTeam = catchAsyncError(async(req,res,next)=>{
 
 
 exports.getAllTeamMembers = catchAsyncError( async (req,res,next)=>{
-  const teammembersCount= await TeamMember.countDocuments();
+  const teammembersCount= await TeamMember.countDocuments({team:null});
     
-  const teammembers= await TeamMember.find();
+  const teammembers= await TeamMember.find({team:null});
   res.status(200).json({
       success: true,
       teammembersCount,

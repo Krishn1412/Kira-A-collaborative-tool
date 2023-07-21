@@ -55,8 +55,9 @@ exports.assignTicket= catchAsyncError(async(req,res,next)=>{
       const ticket = await Ticket.findById(ticketId);
       const teammember = await TeamMember.findById(teamMemberId);
     //   const ticket = await Ticket.create(req.body);
+        teammember.ticket.push(ticketId);
         ticket.teamMember = teamMemberId;
-        teammember.ticket = ticketId;
+        // teammember.ticket = ticketId;
         await ticket.save({ validateBeforeSave: false });
         await teammember.save({ validateBeforeSave: false });
 

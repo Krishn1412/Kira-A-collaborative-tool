@@ -258,7 +258,7 @@ const MMD = () => {
           </Drawer>
           <main className={classes.main}>
             
-          <Board/>
+          <Board1/>
 
       </main>
         </div>

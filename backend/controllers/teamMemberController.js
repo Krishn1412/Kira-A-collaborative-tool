@@ -63,3 +63,25 @@ exports.updateStatus = catchAsyncError(async(req,res,next)=>{
     ticket,
     });
 });
+
+exports.viewAssignedTickets = catchAsyncError(async (req, res, next) => {
+  const teamMemberId = req.body.teamMemberId;
+
+  try {
+    // Find the team member by their ID
+    const teamMember = await TeamMember.findById(teamMemberId);
+
+    if (!teamMember) {
+      return res.status(404).json({ success: false, message: 'Team member not found' });
+    }
+
+    // Access the assigned tickets from the 'ticket' array in the team member object
+    const assignedTickets = teamMember.ticket;
+
+    return res.status(200).json({ success: true, assignedTickets });
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});

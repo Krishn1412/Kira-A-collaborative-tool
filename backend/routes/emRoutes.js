@@ -10,7 +10,7 @@ const router=express.Router();
 router.route("/createEngineeringManager").post(createEngineeringManager);
 router.route("/EngineeringManager/assignTeam").post(isAuthUser_EM,assignTeam);
 
-router.route("/ViewAllTeamMembers").get(isAuthUser_EM,getAllTeamMembers);
+router.route("/ViewAllUnassignedTeamMembers").get(isAuthUser_EM,getAllTeamMembers);
 
 router.route("/login/em").post(loginEM_User);
 router.route("/logout/em").get(logoutEM_User);
