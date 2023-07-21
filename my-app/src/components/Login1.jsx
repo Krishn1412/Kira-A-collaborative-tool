@@ -1,10 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { get, isEmpty, set } from "lodash-es";
+import axios from 'axios';
 import { Avatar, Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import { LockOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import { indigo, red } from "@mui/material/colors";
 import PropTypes from "prop-types";
-
+import {  useNavigate } from "react-router-dom";
 
 async function validate(refs, form) {
   for (const [attribute, ref] of Object.entries(refs.current)) {
@@ -21,10 +22,11 @@ async function validate(refs, form) {
 }
 
 export default function Login(props) {
-  const { setAuthType } = props;
+  const { setAuthType, } = props;
   const [form, setForm] = useState({});
   const [showPassword, setShowPassword] = useState();
-
+  const [showError, setError] = useState(false);
+  const navigate = useNavigate();
   const refs = useRef({});
 
   const updateForm = (attribute, value) => {
@@ -39,11 +41,40 @@ export default function Login(props) {
     if (!ok) {
       return;
     }
+    const api_body = {
+      "username": form.email,
+      "password": form.password
+    }
+    const apiUrl = 'http://localhost:4000/api/v1/login/em';
+    console.log("hehe");
+    // Make the API call using Axios
+
+
+    try {
+      const response = await axios.post(apiUrl, api_body);
+      // Handle the response from the API if needed
+      console.log('Response:', response.data);
+      const { user, token } = response.data;
+      console.log(user.username, user.password, token);
+      navigate( "/EM_Dashboard",{ 
+        state: {
+          username: user.username,
+          password: user.password,
+          token: token, // Add the cookie value if available
+        },
+      });
+      
+    } catch (error) {
+      setError(true);
+      // Handle errors if the request fails
+      console.error('Error:', error);
+    }
     console.log(form);
   };
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
+    {showError && <div style={{ color: "red" }}>Invalid username or password</div>}
       <div style={{ width: "60%" }}>
         <form onSubmit={handleSubmit}>
           <div style={{ display: "flex", justifyContent: "center" }}>

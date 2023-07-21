@@ -209,7 +209,6 @@ const MMD = () => {
   const [isOpened, setIsOpened] = useState(false);
 
   return (
-    <BrowserRouter>
     <div className={classes.root}>
          <AppBar className={classes.appBar}>
            <Toolbar>
@@ -269,7 +268,6 @@ const MMD = () => {
           <Typography variant="h6">Footer</Typography>
         </div>
       </div>
-    </BrowserRouter>
   );
 };
 

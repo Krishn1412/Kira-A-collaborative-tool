@@ -16,7 +16,7 @@ const sendToken = require('../utils/jwtToken.js');
 
 //login user
 exports.loginEM_User= catchAsyncError( async (req,res,next)=>{
-    
+  console.log("aaya");
   const {username,password} = req.body;
 
   if(!username || !password){
