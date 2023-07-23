@@ -140,74 +140,17 @@ const Card = styled.div`
   }
 `;
 
-const InputForm = () => {
-  return (
-    <div className="input-form">
-      <input type="text" className="input" placeholder="Name" />
-      <textarea className="description-input" placeholder="Description"></textarea>
-      <button className="submit-button">Submit</button>
-    </div>
-  );
-};
-
-const Dashboard = () => (
-  <Container>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 1</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 2</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 3</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 3</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 3</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-  </Container>
-);
-
-const AddTicket = () => (
-  <div>
-    <div style={{ marginTop: "30px" }}>
-      <Typography variant="h6">Adding a ticket</Typography>
-    </div>
-    <Container>
-      <div>
-        <InputForm />
-      </div>
-    </Container>
-  </div>
-);
+const handleit = () =>{
+  console.log("hello");
+  document.cookie = `userInfo=; expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+}
 
 
 const MMD = () => {
   const classes = useStyles();
   const [isOpened, setIsOpened] = useState(false);
-
+  const cookies = document.cookie;
+  // console.log(cookies);
   return (
     <div className={classes.root}>
          <AppBar className={classes.appBar}>
@@ -254,6 +197,14 @@ const MMD = () => {
               onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
             >
               Update Tickets
+            </Button>
+            <Button
+              className={classes.button}
+              component={Link}
+              to="/"
+              onClick={handleit}
+            >
+              Logout
             </Button>
           </Drawer>
           <main className={classes.main}>

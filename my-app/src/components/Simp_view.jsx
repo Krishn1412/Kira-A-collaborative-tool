@@ -1,5 +1,7 @@
-import React from 'react';
+import React,{useState} from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import UseFetchTickets from './UseFetchTickets';
 
 const Container = styled.div`
   display: flex;
@@ -33,46 +35,91 @@ const TaskName = styled.h3`
 
 const initialData = {
   tasks: {
-    task1: { id: 'task1', name: 'Task 1' },
-    task2: { id: 'task2', name: 'Task 2' },
-    task3: { id: 'task3', name: 'Task 3' },
-    task4: { id: 'task4', name: 'Task 4' },
+    // task1: { id: 'task1', name: 'Task 1' },
   },
   columns: {
     column1: {
       id: 'column1',
       title: 'Not Started',
-      taskIds: ['task1', 'task2'],
+      taskIds: [],
     },
     column2: {
       id: 'column2',
       title: 'In Progress',
-      taskIds: ['task3'],
+      taskIds: [],
     },
     column3: {
       id: 'column3',
       title: 'Completed',
-      taskIds: ['task4'],
+      taskIds: [],
     },
   },
   columnOrder: ['column1', 'column2', 'column3'],
 };
 
+// const cookies = document.cookie;
+// const cookieArray = cookies.split('; ');
+
+// let userInfo = null;
+
+// for (const cookie of cookieArray) {
+//   const [name, value] = cookie.split('=');
+//   if (name === 'userInfo') {
+//     userInfo = JSON.parse(decodeURIComponent(value));
+//     break;
+//   }
+// }
+// // console.log(dd'userInfo', userInfo);
+// if(userInfo){
+//   const api_body = {
+//     "teamMemberId":userInfo.userid,
+//   }
+//   // console.log(api_body);
+//   const apiUrl = 'http://localhost:4000/api/v1/TeamMember/viewTickets';
+//   // Rest of your code...
+
+
+// try {
+//   const response = await axios.post(apiUrl, api_body);
+//   // console.log('Response:', response.data);
+//         response.data.tickets.forEach((ticket) => {
+//           const { name, status } = ticket;
+//           if (status === 'Not Started') {
+//             initialData.columns.column1.taskIds.push(name);
+//           } else if (status === 'In Progress') {
+//             initialData.columns.column2.taskIds.push(name);
+//           } else if (status === 'Completed') {
+//             initialData.columns.column3.taskIds.push(name);
+//           }
+//         });
+//         // console.log(initialData);
+// } catch (error) {
+//   console.error('Error:', error);
+// }
+// }
+
 const BoardView = () => {
-  const { columns } = initialData;
+  const [teamMemberId, setTeamMemberId] = useState(''); // Set your team member ID here
+  const tickets = UseFetchTickets(teamMemberId);
+console.log("aya")
+  if (!tickets) {
+    // You can render a loading state here if needed
+    return <div>Loading...</div>;
+  }
+
+  const { columns } = tickets;
 
   return (
     <Container>
-      {initialData.columnOrder.map((columnId) => {
+      {tickets.columnOrder.map((columnId) => {
         const column = columns[columnId];
-        const tasks = column.taskIds.map((taskId) => initialData.tasks[taskId]);
 
         return (
           <Column key={column.id}>
             <ColumnTitle>{column.title}</ColumnTitle>
-            {tasks.map((task) => (
-              <Card key={task.id}>
-                <TaskName>{task.name}</TaskName>
+            {column.taskIds.map((task) => (
+              <Card key={task}>
+                <TaskName>{task}</TaskName>
               </Card>
             ))}
           </Column>
@@ -81,5 +128,4 @@ const BoardView = () => {
     </Container>
   );
 };
-
 export default BoardView;

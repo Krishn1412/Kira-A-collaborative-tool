@@ -56,6 +56,13 @@ export default function Login(props) {
       console.log('Response:', response.data);
       const { user, token } = response.data;
       console.log(user.username, user.password, token);
+      const emInfo = {
+        username: user.username,
+        userid: user._id,
+        token: token,
+      };
+      const emInfoString = JSON.stringify(emInfo);
+      document.cookie = `emInfo=${emInfoString}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
       navigate( "/EM_Dashboard",{ 
         state: {
           username: user.username,
@@ -161,7 +168,7 @@ export default function Login(props) {
             Don't have an account?
           </Button>
         </div>
-        <div style={{ marginTop: "16px" }}>{JSON.stringify(form, null, 2)}</div>
+        {/* <div style={{ marginTop: "16px" }}>{JSON.stringify(form, null, 2)}</div> */}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Drawer from "@material-ui/core/Drawer";
@@ -11,6 +11,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components";
 import "../styles/add_new.css"
+import axios from "axios"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Outlet, Link } from "react-router-dom";
 
@@ -198,10 +199,70 @@ const Card = styled.div`
   }
 `;
 
+const useFetchTeams = () => {
+  const [teams, setTeams] = useState([]);
 
-const EMD = () => {
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        // Make the API call to fetch teams data
+        const response = await axios.get("http://localhost:4000/api/v1/ViewTeams");
+        console.log(response);
+        setTeams(response.data.teams);
+      } catch (error) {
+        console.error("Error fetching teams:", error);
+      }
+    };
+
+    fetchTeams();
+  }, []);
+
+  return teams;
+};
+
+// Custom hook to fetch new members data
+const useFetchNewMembers = () => {
+  const [newMembers, setNewMembers] = useState([]);
+
+  useEffect(() => {
+    const fetchNewMembers = async () => {
+      try {
+        // Make the API call to fetch new members data
+        const response = await axios.get("http://localhost:4000/api/v1/ViewAllUnassignedTeamMembers");
+        console.log(response);
+        setNewMembers(response.data.teammembers);
+      } catch (error) {
+        console.error("Error fetching new members:", error);
+      }
+    };
+
+    fetchNewMembers();
+  }, []);
+
+  return newMembers;
+};
+const handleit = () =>{
+  document.cookie = `emInfo=; expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+}
+
+const EMD =  () => {
   const classes = useStyles();
   const [isOpened, setIsOpened] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState("");
+  const [selectedMember, setSelectedMember] = useState("");
+  const teams = useFetchTeams();
+  const newMembers = useFetchNewMembers();
+
+  const handleButtonClick = async () => {
+    // Use selectedTeam and selectedMember to make another API call
+    // ...
+    const api_body={
+      "teamId":selectedTeam,
+      "teamMemId":selectedMember
+    }
+    const response = await axios.post("http://localhost:4000/api/v1/EngineeringManager/assignTeam",api_body);
+    console.log(response);
+  };
 
   return (
     <div className={classes.root}>
@@ -215,58 +276,120 @@ const EMD = () => {
             {isOpened ? <ChevronLeftIcon /> : <MenuIcon />}
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Engineering Manger Dashboard
+            Engineering Manager Dashboard
           </Typography>
         </Toolbar>
       </AppBar>
       <Toolbar />
       <div className={classes.container}>
-      <Drawer
-            variant="permanent"
-            classes={{
-              paper: clsx(classes.drawer, {
-                [classes.closed]: !isOpened,
-                [classes.opened]: isOpened,
-              }),
-            }}
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: clsx(classes.drawer, {
+              [classes.closed]: !isOpened,
+              [classes.opened]: isOpened,
+            }),
+          }}
+        >
+          <Button
+            className={classes.button}
+            component={Link}
+            to="/EM_Dashboard"
+            onClick={() => setIsOpened(false)}
           >
-            <Button
+            Dashboard
+          </Button>
+          <Button
+            className={classes.button}
+            component={Link}
+            to="/add_mem"
+            onClick={() => setIsOpened(false)}
+          >
+            Add member
+          </Button>
+          <Button
+            className={classes.button}
+            component={Link}
+            to="/add_team"
+            onClick={() => setIsOpened(false)}
+          >
+            Add new Team
+          </Button>
+          <Button
               className={classes.button}
               component={Link}
-              to="/EM_Dashboard"
-              onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
+              to="/"
+              onClick={handleit}
             >
-              Dashboard
+              Logout
             </Button>
-            <Button
-              className={classes.button}
-              component={Link}
-              to="/add_mem"
-              onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
-            >
-              Add member
-            </Button>
-            <Button
-              className={classes.button}
-              component={Link}
-              to="/add_team"
-              onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
-            >
-              Add new Team
-            </Button>
-          </Drawer>
+        </Drawer>
         <main className={classes.main}>
           <Container>
-                <div>
-            <Dropdown />
-            <Dropdown1 />
-            <Table />
+            <div>
+              {/* Render the teams dropdown */}
+              <select
+                className="dropdown"
+                value={selectedTeam}
+                onChange={(e) => setSelectedTeam(e.target.value)}
+              >
+                <option value="">Select a team</option>
+                {teams.map((team) => (
+                  <option key={team.id} value={team._id}>
+                    {team.name}
+                  </option>
+                ))}
+              </select>
+
+              {/* Render the new members dropdown */}
+              <select
+                className="dropdown"
+                value={selectedMember}
+                onChange={(e) => setSelectedMember(e.target.value)}
+              >
+                <option value="">Select a new member</option>
+                {newMembers.map((member) => (
+                  <option key={member.id} value={member._id}>
+                    {member.name}
+                  </option>
+                ))}
+              </select>
+
+              {/* Render the table */}
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* Replace this with the actual data for the table */}
+                  <tr>
+                    <td>1</td>
+                    <td>John</td>
+                    <td>25</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Jane</td>
+                    <td>30</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Bob</td>
+                    <td>35</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            
           </Container>
-          <button className="button">
+
+          {/* Button to trigger the API call */}
+          <button className="button" onClick={handleButtonClick}>
             <span>Add Member</span>
-            </button>
+          </button>
         </main>
       </div>
       <div className={classes.footer}>

@@ -54,8 +54,18 @@ export default function Login(props) {
       const response = await axios.post(apiUrl, api_body);
       // Handle the response from the API if needed
       console.log('Response:', response.data);
+      
       const { user, token } = response.data;
       console.log(user.username, user.password, token);
+      const pmInfo = {
+        username: user.username,
+        userid: user._id,
+        token: token,
+        teamId: user.team,
+      };
+      const pmInfoString = JSON.stringify(pmInfo);
+      document.cookie = `pmInfo=${pmInfoString}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
+      
       navigate( "/PM_Dashboard",{ 
         state: {
           username: user.username,
@@ -63,6 +73,8 @@ export default function Login(props) {
           token: token, // Add the cookie value if available
         },
       });
+      console.log(user.team);
+      
       
     } catch (error) {
       setError(true);
@@ -160,7 +172,7 @@ export default function Login(props) {
             Don't have an account?
           </Button>
         </div>
-        <div style={{ marginTop: "16px" }}>{JSON.stringify(form, null, 2)}</div>
+        {/* <div style={{ marginTop: "16px" }}>{JSON.stringify(form, null, 2)}</div> */}
       </div>
     </div>
   );

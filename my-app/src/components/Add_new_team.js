@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
@@ -13,7 +14,7 @@ import styled from "styled-components";
 import AssignTicket from "./Assign_ticket"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Outlet, Link } from "react-router-dom";
-import Board from "./Simp_view1";
+import axios from 'axios';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -139,20 +140,68 @@ const Card = styled.div`
   }
 `;
 
+const InputForm = () => {
+  const [name, setName] = useState('');
 
+  const handleSubmit = async () => {
+    
+    const cookies = document.cookie;
+    const cookieArray = cookies.split('; ');
+    let emInfo = null;
+
+    for (const cookie of cookieArray) {
+      const [name, value] = cookie.split('=');
+      if (name === 'emInfo') {
+        emInfo = JSON.parse(decodeURIComponent(value));
+        break;
+      }
+    }
+
+    if (emInfo) {
+        
+      const api_body = {
+        "name":name,
+        "engineeringManager":emInfo.userid
+      };
+      
+      const apiUrl = 'http://localhost:4000/api/v1/createTeam';
+      try {
+        const response = await axios.post(apiUrl, api_body);
+        console.log(response.data);
+        // Clear the input fields after successful submission
+        setName('');
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+  };
+
+  return (
+    <div className="input-form">
+      <input
+        type="text"
+        className="input"
+        placeholder="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <button className="submit-button" onClick={handleSubmit}>
+        Submit
+      </button>
+    </div>
+  );
+};
 
 const handleit = () =>{
-  document.cookie = `pmInfo=; expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
-}
+    document.cookie = `emInfo=; expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+  }
 
-// const cookies = document.cookie;
-  // console.log(cookies);
-
-const MMD = () => {
+const AddTicket = () => {
   const classes = useStyles();
   const [isOpened, setIsOpened] = useState(false);
-  
+
   return (
+
     <div className={classes.root}>
          <AppBar className={classes.appBar}>
            <Toolbar>
@@ -168,7 +217,7 @@ const MMD = () => {
               )}
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              Product Dashboard
+              Engineering Manager Dashboard
             </Typography>
           </Toolbar>
         </AppBar>
@@ -186,7 +235,7 @@ const MMD = () => {
             <Button
               className={classes.button}
               component={Link}
-              to="/PM_Dashboard"
+              to="/EM_Dashboard"
               onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
             >
               Dashboard
@@ -194,18 +243,18 @@ const MMD = () => {
             <Button
               className={classes.button}
               component={Link}
-              to="/add_ticket"
+              to="/add_mem"
               onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
             >
-              Add Tickets
+              Add member
             </Button>
             <Button
               className={classes.button}
               component={Link}
-              to="/assign_ticket"
+              to="/add_team"
               onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
             >
-              Assign Tickets
+              Add new Team
             </Button>
             <Button
               className={classes.button}
@@ -217,16 +266,24 @@ const MMD = () => {
             </Button>
           </Drawer>
           <main className={classes.main}>
-            
-          <Board/>
-
+          <div>
+    <div style={{ marginTop: "30px" }}>
+      <Typography variant="h6">Adding a team</Typography>
+    </div>
+    <Container>
+      <div>
+        <InputForm />
+      </div>
+    </Container>
+  </div>
       </main>
         </div>
         <div className={classes.footer}>
           <Typography variant="h6">Footer</Typography>
         </div>
       </div>
+
   );
 };
 
-export default MMD;
+export default AddTicket;

@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const Container = styled.div`
   display: flex;
@@ -37,47 +39,113 @@ const TicketValue = styled.p`
   margin-bottom: 16px;
 `;
 
-const TicketPage = ({ ticketNo }) => {
-  const [ticketDetails, setTicketDetails] = useState(null);
+const TeamMemberDropdown = ({ teamMems, onChange }) => {
+  const handleSelectChange = (event) => {
+    const selectedId = event.target.value;
+    onChange(selectedId);
+  };
 
+  if (!teamMems.length) {
+    // If teamMems data is not available yet, show a loading message or a placeholder
+    return <p>Loading team members...</p>;
+  }
+
+  return (
+    <select className="dropdown" onChange={handleSelectChange}>
+      <option value="">Select a team member</option>
+      {teamMems.map((teamMem) => (
+        <option key={teamMem._id} value={teamMem._id}>
+          {teamMem.name}
+        </option>
+      ))}
+    </select>
+  );
+};
+
+const TicketPage = ({  }) => {
+  const [ticketDetails, setTicketDetails] = useState(null);
+  const [teamMems, teamSet] = useState({});
+  const [ticketName, nameSet] = useState("");
+  const { id } = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
     // Simulating API call to fetch ticket details
     const fetchTicketDetails = async () => {
-      try {
-        // Replace this with your API call to fetch ticket details
-        // For now, I'm just simulating the response
-        const response = await fetch(`/api/tickets/${ticketNo}`);
-        const data = await response.json();
-        setTicketDetails(data);
-      } catch (error) {
-        console.error('Error fetching ticket details:', error);
+      const cookies = document.cookie;
+      const cookieArray = cookies.split('; ');
+      // console.log("jui")
+      // console.log(cookieArray)
+      let pmInfo = null;
+
+      for (const cookie of cookieArray) {
+        const [name, value] = cookie.split('=');
+        if (name === 'pmInfo') {
+          pmInfo = JSON.parse(decodeURIComponent(value));
+          break;
+        }
       }
+      // console.log('pmInfo', pmInfo.teamId);
+      if(pmInfo){
+        const api_body = {
+          "teamId":pmInfo.teamId,
+        }
+      //   console.log(api_body);
+        const apiUrl = 'http://localhost:4000/api/v1/viewTeamMembers';
+        // Rest of your code...
+
+
+      try {
+        const response = await axios.post(apiUrl, api_body);
+      //   console.log(response)
+        console.log('Response:', response.data);
+        teamSet(response.data.teamMems);
+              // console.log(initialData);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+}
     };
 
     fetchTicketDetails();
-  }, [ticketNo]);
+  }, []);
+  const [selectedTeamMemberId, setSelectedTeamMemberId] = useState("");
 
-  if (!ticketDetails) {
-    return <div>Loading...</div>;
-  }
+  const handleTeamMemberChange = (selectedId) => {
+    setSelectedTeamMemberId(selectedId);
+  };
+  const handleButtonClick = async () => {
+    try {
+      // Make the API call with the selected team member ID
 
-  const { title, description, status, assignee, priority } = ticketDetails;
+      if (selectedTeamMemberId) {
+        console.log(selectedTeamMemberId)
+        console.log(id)
+        const api_body = {
+          "ticket":id,
+          "teamMember":selectedTeamMemberId
+      }
+        const apiUrl = `http://localhost:4000/api/v1/ticket/productManager/assignTicket`;
+        const response = await axios.post(apiUrl,api_body);
+
+        // Handle the API response as needed
+        // console.log('API Response:', response.data);
+        navigate("/assign_ticket");
+      } else {
+        console.error('No team member selected.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
 
   return (
     <Container>
-      <TicketCard>
-        <TicketTitle>{title}</TicketTitle>
-        <TicketDetails>
-          <TicketLabel>Description:</TicketLabel>
-          <TicketValue>{description}</TicketValue>
-          <TicketLabel>Status:</TicketLabel>
-          <TicketValue>{status}</TicketValue>
-          <TicketLabel>Assignee:</TicketLabel>
-          <TicketValue>{assignee}</TicketValue>
-          <TicketLabel>Priority:</TicketLabel>
-          <TicketValue>{priority}</TicketValue>
-        </TicketDetails>
-      </TicketCard>
+      <TeamMemberDropdown
+        teamMems={teamMems}
+        onChange={setSelectedTeamMemberId}
+      />
+      <button onClick={handleButtonClick}>Execute API Call</button>
     </Container>
   );
 };

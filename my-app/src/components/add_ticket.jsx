@@ -14,7 +14,7 @@
   import AssignTicket from "./Assign_ticket"
   import { BrowserRouter, Routes, Route } from "react-router-dom";
   import { Outlet, Link } from "react-router-dom";
-  import Board from "./Simp_view";
+ import axios from 'axios';
   
   
   const useStyles = makeStyles((theme) => ({
@@ -139,57 +139,75 @@
       left: -8px;
     }
   `;
-  
+
   const InputForm = () => {
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [priority, setPriority] = useState('');
+  
+    const handleSubmit = async () => {
+      const cookies = document.cookie;
+      const cookieArray = cookies.split('; ');
+      let pmInfo = null;
+  
+      for (const cookie of cookieArray) {
+        const [name, value] = cookie.split('=');
+        if (name === 'pmInfo') {
+          pmInfo = JSON.parse(decodeURIComponent(value));
+          break;
+        }
+      }
+  
+      if (pmInfo) {
+        const api_body = {
+          name,
+          status: 'Not Started',
+          description,
+          priority,
+          productManager: pmInfo.teamId,
+        };
+        const apiUrl = 'http://localhost:4000/api/v1/ticket/productManager/createTicket';
+        try {
+          const response = await axios.post(apiUrl, api_body);
+          console.log(response.data);
+          // Clear the input fields after successful submission
+          setName('');
+          setDescription('');
+          setPriority('');
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+    };
+  
     return (
       <div className="input-form">
-        <input type="text" className="input" placeholder="Name" />
-        <textarea className="description-input" placeholder="Description"></textarea>
-        <input type="text" className="input" placeholder="Priority" />
-        <button className="submit-button">Submit</button>
+        <input
+          type="text"
+          className="input"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <textarea
+          className="description-input"
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        ></textarea>
+        <input
+          type="text"
+          className="input1"
+          placeholder="Priority"
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
+        />
+        <button className="submit-button" onClick={handleSubmit}>
+          Submit
+        </button>
       </div>
     );
   };
-  
-  const Dashboard = () => (
-    <Container>
-      <CardWrapper>
-        <Card>
-          <h3 className="card-title">Card 1</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <div className="card-link">Card Link</div>
-        </Card>
-      </CardWrapper>
-      <CardWrapper>
-        <Card>
-          <h3 className="card-title">Card 2</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <div className="card-link">Card Link</div>
-        </Card>
-      </CardWrapper>
-      <CardWrapper>
-        <Card>
-          <h3 className="card-title">Card 3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <div className="card-link">Card Link</div>
-        </Card>
-      </CardWrapper>
-      <CardWrapper>
-        <Card>
-          <h3 className="card-title">Card 3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <div className="card-link">Card Link</div>
-        </Card>
-      </CardWrapper>
-      <CardWrapper>
-        <Card>
-          <h3 className="card-title">Card 3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <div className="card-link">Card Link</div>
-        </Card>
-      </CardWrapper>
-    </Container>
-  );
   
   
   

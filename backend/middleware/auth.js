@@ -6,7 +6,14 @@ const PM= require("../models/pmModel");
 const TM= require("../models/teamMemberModel");
 
 exports.isAuthUser_EM= catchAsyncError( async (req,res,next)=>{
-    const {token}= req.cookies;
+    const userInfoCookie = req.cookies['userInfo'];
+  
+    if (!userInfoCookie) {
+      return next(new ErrorHandler("Please login to access this resource", 400));
+    }
+  
+    const userInfo = JSON.parse(decodeURIComponent(userInfoCookie));
+    const { token } = userInfo;
 
     if(!token){
         return next(new ErrorHandler("Please login to access this resource",400));
@@ -19,7 +26,14 @@ exports.isAuthUser_EM= catchAsyncError( async (req,res,next)=>{
     next();
 });
 exports.isAuthUser_PM= catchAsyncError( async (req,res,next)=>{
-    const {token}= req.cookies;
+    const userInfoCookie = req.cookies['userInfo'];
+  
+    if (!userInfoCookie) {
+      return next(new ErrorHandler("Please login to access this resource", 400));
+    }
+  
+    const userInfo = JSON.parse(decodeURIComponent(userInfoCookie));
+    const { token } = userInfo;
 
     if(!token){
         return next(new ErrorHandler("Please login to access this resource",400));
@@ -31,19 +45,32 @@ exports.isAuthUser_PM= catchAsyncError( async (req,res,next)=>{
 
     next();
 });
-exports.isAuthUser_TM= catchAsyncError( async (req,res,next)=>{
-    const {token}= req.cookies;
-
-    if(!token){
-        return next(new ErrorHandler("Please login to access this resource",400));
+exports.isAuthUser_TM = catchAsyncError(async (req, res, next) => {
+    const userInfoCookie = req.cookies['userInfo'];
+  
+    if (!userInfoCookie) {
+      return next(new ErrorHandler("Please login to access this resource", 400));
     }
-
-    const decodedData= jwt.verify(token, process.env.JWT_SECRET);
-
-    req.user = await TM.findById(decodedData.id);
-
-    next();
-});
+  
+    const userInfo = JSON.parse(decodeURIComponent(userInfoCookie));
+    const { token } = userInfo;
+  
+    // console.log(req.cookies);
+    // console.log(token);
+  
+    if (!token) {
+      return next(new ErrorHandler("Please login to access this resource", 400));
+    }
+  
+    try {
+      const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await TM.findById(decodedData.id);
+      next();
+    } catch (error) {
+      return next(new ErrorHandler("Invalid or expired token", 401));
+    }
+  });
+  
 exports.authorizeRoles = (...roles) =>{
 
     return (req,res,next)=>{

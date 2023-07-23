@@ -63,6 +63,13 @@ export default function Login(props) {
           token: token, // Add the cookie value if available
         },
       });
+      const userInfo = {
+        username: user.username,
+        userid: user._id,
+        token: token,
+      };
+      const userInfoString = JSON.stringify(userInfo);
+      document.cookie = `userInfo=${userInfoString}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
       
     } catch (error) {
       setError(true);
@@ -160,7 +167,7 @@ export default function Login(props) {
             Don't have an account?
           </Button>
         </div>
-        <div style={{ marginTop: "16px" }}>{JSON.stringify(form, null, 2)}</div>
+        {/* <div style={{ marginTop: "16px" }}>{JSON.stringify(form, null, 2)}</div> */}
       </div>
     </div>
   );
