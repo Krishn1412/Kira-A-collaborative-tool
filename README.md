@@ -1,4 +1,4 @@
-# Kira - Collaborative Tool (Readme)
+# Kira - Collaborative Tool
 
 ## Introduction
 Kira is a collaborative tool similar to Jira, built using the MERN (MongoDB, Express, React, Node.js) stack. It facilitates seamless project management for teams, with three distinct user roles: Engineering Manager, Product Manager, and Team Member.
