@@ -13,7 +13,7 @@ import styled from "styled-components";
 import AssignTicket from "./Assign_ticket"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Outlet, Link } from "react-router-dom";
-import Board from "./Simp_view";
+import Board from "./Simp_view1";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -139,77 +139,20 @@ const Card = styled.div`
   }
 `;
 
-const InputForm = () => {
-  return (
-    <div className="input-form">
-      <input type="text" className="input" placeholder="Name" />
-      <textarea className="description-input" placeholder="Description"></textarea>
-      <input type="text" className="input" placeholder="Priority" />
-      <button className="submit-button">Submit</button>
-    </div>
-  );
-};
-
-const Dashboard = () => (
-  <Container>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 1</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 2</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 3</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 3</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 3</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-  </Container>
-);
-
-const AddTicket = () => (
-  <div>
-    <div style={{ marginTop: "30px" }}>
-      <Typography variant="h6">Adding a ticket</Typography>
-    </div>
-    <Container>
-      <div>
-        <InputForm />
-      </div>
-    </Container>
-  </div>
-);
 
 
-const PMD = () => {
+const handleit = () =>{
+  document.cookie = `pmInfo=; expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+}
+
+// const cookies = document.cookie;
+  // console.log(cookies);
+
+const MMD = () => {
   const classes = useStyles();
   const [isOpened, setIsOpened] = useState(false);
-
+  
   return (
-    <BrowserRouter>
     <div className={classes.root}>
          <AppBar className={classes.appBar}>
            <Toolbar>
@@ -225,7 +168,7 @@ const PMD = () => {
               )}
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              Product Manager Dashboard
+              Product Dashboard
             </Typography>
           </Toolbar>
         </AppBar>
@@ -243,7 +186,7 @@ const PMD = () => {
             <Button
               className={classes.button}
               component={Link}
-              to="/"
+              to="/PM_Dashboard"
               onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
             >
               Dashboard
@@ -254,32 +197,36 @@ const PMD = () => {
               to="/add_ticket"
               onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
             >
-              Add new ticket
+              Add Tickets
             </Button>
             <Button
               className={classes.button}
               component={Link}
-              to="/ass_ticket"
+              to="/assign_ticket"
               onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
             >
               Assign Tickets
             </Button>
+            <Button
+              className={classes.button}
+              component={Link}
+              to="/"
+              onClick={handleit}
+            >
+              Logout
+            </Button>
           </Drawer>
           <main className={classes.main}>
-          <Outlet />
-      <Routes>
-          <Route path="/" element={<Board/>} />
-          <Route path="/add_ticket" element={<AddTicket />} />
-          <Route path="/ass_ticket" element={<AssignTicket />} />
-      </Routes>
+            
+          <Board/>
+
       </main>
         </div>
         <div className={classes.footer}>
           <Typography variant="h6">Footer</Typography>
         </div>
       </div>
-    </BrowserRouter>
   );
 };
 
-export default PMD;
+export default MMD;

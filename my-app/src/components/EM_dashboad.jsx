@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Drawer from "@material-ui/core/Drawer";
@@ -13,7 +13,7 @@ import styled from "styled-components";
 import "../styles/add_new.css"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Outlet, Link } from "react-router-dom";
-
+import axios from "axios"
 const useStyles = makeStyles((theme) => ({
     root: {
         textAlign: "center",
@@ -176,6 +176,9 @@ const Dashboard = () => (
     </CardWrapper>
   </Container>
 );
+const handleit = () =>{
+  document.cookie = `emInfo=; expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+}
 
 const AddMem = () => (
   <Container>
@@ -273,9 +276,25 @@ const Dropdown1 = () => {
 const EMD = () => {
   const classes = useStyles();
   const [isOpened, setIsOpened] = useState(false);
+  const [teams, setTeams] = useState([]);
 
+  useEffect(() => {
+    //   console.log(api_body);
+      const apiUrl = 'http://localhost:4000/api/v1/ViewTeams';
+      // Rest of your code...
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(apiUrl);
+          console.log(response.data);
+          setTeams(response.data.teams);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
+      fetchData();
+  }, []);
   return (
-    <BrowserRouter>
+    
     <div className={classes.root}>
          <AppBar className={classes.appBar}>
            <Toolbar>
@@ -309,7 +328,7 @@ const EMD = () => {
             <Button
               className={classes.button}
               component={Link}
-              to="/"
+              to="/EM_Dashboard"
               onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
             >
               Dashboard
@@ -330,21 +349,37 @@ const EMD = () => {
             >
               Add new Team
             </Button>
+            <Button
+              className={classes.button}
+              component={Link}
+              to="/"
+              onClick={handleit}
+            >
+              Logout
+            </Button>
           </Drawer>
           <main className={classes.main}>
-          <Outlet />
-      <Routes>
-          <Route path="/" element={<Dashboard/>} />
-          <Route path="/add_mem" element={<AddMem />} />
-          <Route path="/add_team" element={<AddTeam />} />
-      </Routes>
+          <div style={{marginTop:"40px"}}><h3>View Teams</h3></div>
+          <Container>
+         
+      
+      {teams.map((team) => (
+        <CardWrapper>
+      <Card>
+        <h3 className="card-title">{team.name}</h3>
+        <p>{team._id}</p>
+      </Card>
+    </CardWrapper>
+      ))}
+    
+      
+    </Container>
       </main>
         </div>
         <div className={classes.footer}>
           <Typography variant="h6">Footer</Typography>
         </div>
-      </div>
-    </BrowserRouter>   
+      </div>  
   );
 };
 

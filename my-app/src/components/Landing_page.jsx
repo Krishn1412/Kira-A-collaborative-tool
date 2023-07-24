@@ -1,13 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { createBrowserHistory } from 'history';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Outlet, Link } from "react-router-dom";
-import EM_login from "./EM_login";
-import PM_login from "./Pm_login";
-import Mem_login from "./Mem_login";
-const history = createBrowserHistory();
-
+import Footer from './Footer';
 // variables
 const darkPurple = '#00106a';
 const lightBlue = '#dfe9ff';
@@ -21,7 +15,7 @@ const Nav = styled.nav`
   background: ${white};
   box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15);
   display: flex;
-  align-items: center;
+  align-items: center; 
   justify-content: flex-start;
   padding: 0;
 
@@ -106,7 +100,9 @@ const Banner = styled.section`
   -o-transform: translateY(-5px);
   transform: translateY(-5px);
     box-shadow: 0 1rem 1.5rem rgba(0,0,0,.25);
+    background: rgba(97, 180, 232)
   }
+  
 }
   .banner-text {
     max-width: 550px;
@@ -202,7 +198,7 @@ const Card = styled.div`
   }
 
   .card-link {
-    position: absolute;
+    position: center;
     bottom: 18px;
   }
 
@@ -246,24 +242,28 @@ const cardsData = [
 ];
 
 // Footer styles
-const Footer = styled.footer`
-  background: ${darkPurple};
-  margin: 32px 0 0;
-  padding: 32px 0;
+// const Footer = styled.footer`
+//   background: ${darkPurple};
+//   margin: 32px 0 0;
+//   padding: 32px 0;
 
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+//   ul {
+//     margin: 0;
+//     padding: 0;
+//     list-style: none;
 
-    li {
-      color: ${white};
-      margin-bottom: 16px;
-    }
-  }
-`;
+//     li {
+//       color: ${white};
+//       margin-bottom: 16px;
+//     }
+//   }
+// `;
 
-const Landing = () => (
+
+
+const Landing = () => {
+  return (
+    <>
       <div>
       <Nav>
       <div className="logo">
@@ -319,51 +319,23 @@ const Landing = () => (
       </CardWrapper>
     ))}
     </Container>
-    <Footer>
+    <Footer />
+    {/* <Footer>
       <div className="container">
         <div className="row">
           <div className="col-md-4">
             <ul>
               <li>Footer Link</li>
-              <li>Footer Link</li>
             </ul>
           </div>
         </div>
       </div>
-    </Footer>
+    </Footer> */}
     </div>
     <Outlet/>
     </div>
-);
-
-
-const App = () => {
-  const handleit1 = () => {
-    // Navigate to a different page
-    window.location.href = 'https://www.example.com';
-  };
-  const handleit2 = () => {
-    // Navigate to a different page
-    history.push('./Pm_login.jsx');
-  };
-  const handleit3 = () => {
-    // Navigate to a different page
-    history.push('./Mem_login.jsx');
-  };
-  return (
-    <>
-    <BrowserRouter>
-      
-      
-      <Routes>
-        <Route exact path="/" element={<Landing />} />
-          <Route path="/EM_login" element={<EM_login />} />
-          <Route path="/PM_login" element={<PM_login />} />
-          <Route path="/Mem_login" element={<Mem_login />} />
-        </Routes>
-      </BrowserRouter>
     </>
   );
 };
 
-export default App;
+export default Landing;

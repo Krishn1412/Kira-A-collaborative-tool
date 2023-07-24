@@ -4,6 +4,8 @@ import { Avatar, Button, IconButton, InputAdornment, TextField } from "@mui/mate
 import { LockOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import { indigo, red } from "@mui/material/colors";
 import PropTypes from "prop-types";
+import axios from 'axios';
+import {  useNavigate } from "react-router-dom";
 
 async function validate(refs, form) {
   for (const [attribute, ref] of Object.entries(refs.current)) {
@@ -23,7 +25,8 @@ export default function Login(props) {
   const { setAuthType } = props;
   const [form, setForm] = useState({});
   const [showPassword, setShowPassword] = useState();
-
+  const [showError, setError] = useState(false);
+  const navigate = useNavigate();
   const refs = useRef({});
 
   const updateForm = (attribute, value) => {
@@ -37,6 +40,46 @@ export default function Login(props) {
     const ok = await validate(refs, form);
     if (!ok) {
       return;
+    }
+    const api_body = {
+      "username": form.email,
+      "password": form.password
+    }
+    const apiUrl = 'http://localhost:4000/api/v1/login/pm';
+    console.log("hehe");
+    // Make the API call using Axios
+
+
+    try {
+      const response = await axios.post(apiUrl, api_body);
+      // Handle the response from the API if needed
+      console.log('Response:', response.data);
+      
+      const { user, token } = response.data;
+      console.log(user.username, user.password, token);
+      const pmInfo = {
+        username: user.username,
+        userid: user._id,
+        token: token,
+        teamId: user.team,
+      };
+      const pmInfoString = JSON.stringify(pmInfo);
+      document.cookie = `pmInfo=${pmInfoString}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
+      
+      navigate( "/PM_Dashboard",{ 
+        state: {
+          username: user.username,
+          password: user.password,
+          token: token, // Add the cookie value if available
+        },
+      });
+      console.log(user.team);
+      
+      
+    } catch (error) {
+      setError(true);
+      // Handle errors if the request fails
+      console.error('Error:', error);
     }
     console.log(form);
   };
@@ -129,7 +172,7 @@ export default function Login(props) {
             Don't have an account?
           </Button>
         </div>
-        <div style={{ marginTop: "16px" }}>{JSON.stringify(form, null, 2)}</div>
+        {/* <div style={{ marginTop: "16px" }}>{JSON.stringify(form, null, 2)}</div> */}
       </div>
     </div>
   );

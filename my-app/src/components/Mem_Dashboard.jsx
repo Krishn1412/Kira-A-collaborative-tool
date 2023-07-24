@@ -14,7 +14,6 @@ import AssignTicket from "./Assign_ticket"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Outlet, Link } from "react-router-dom";
 import Board from "./Simp_view";
-import Board1 from "./Drag_drop";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -140,76 +139,20 @@ const Card = styled.div`
   }
 `;
 
-const InputForm = () => {
-  return (
-    <div className="input-form">
-      <input type="text" className="input" placeholder="Name" />
-      <textarea className="description-input" placeholder="Description"></textarea>
-      <button className="submit-button">Submit</button>
-    </div>
-  );
-};
 
-const Dashboard = () => (
-  <Container>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 1</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 2</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 3</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 3</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-    <CardWrapper>
-      <Card>
-        <h3 className="card-title">Card 3</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div className="card-link">Card Link</div>
-      </Card>
-    </CardWrapper>
-  </Container>
-);
 
-const AddTicket = () => (
-  <div>
-    <div style={{ marginTop: "30px" }}>
-      <Typography variant="h6">Adding a ticket</Typography>
-    </div>
-    <Container>
-      <div>
-        <InputForm />
-      </div>
-    </Container>
-  </div>
-);
+const handleit = () =>{
+  document.cookie = `userInfo=; expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+}
 
+// const cookies = document.cookie;
+  // console.log(cookies);
 
 const MMD = () => {
   const classes = useStyles();
   const [isOpened, setIsOpened] = useState(false);
-
+  
   return (
-    <BrowserRouter>
     <div className={classes.root}>
          <AppBar className={classes.appBar}>
            <Toolbar>
@@ -243,7 +186,7 @@ const MMD = () => {
             <Button
               className={classes.button}
               component={Link}
-              to="/"
+              to="/Mem_Dashboard"
               onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
             >
               Dashboard
@@ -251,25 +194,30 @@ const MMD = () => {
             <Button
               className={classes.button}
               component={Link}
-              to="/upd_ticket"
+              to="/update_ticket"
               onClick={() => setIsOpened(false)} // Close the drawer after clicking the button
             >
               Update Tickets
             </Button>
+            <Button
+              className={classes.button}
+              component={Link}
+              to="/"
+              onClick={handleit}
+            >
+              Logout
+            </Button>
           </Drawer>
           <main className={classes.main}>
-          <Outlet />
-      <Routes>
-          <Route path="/" element={<Board/>} />
-          <Route path="/upd_ticket" element={<Board1 />} />
-      </Routes>
+            
+          <Board/>
+
       </main>
         </div>
         <div className={classes.footer}>
           <Typography variant="h6">Footer</Typography>
         </div>
       </div>
-    </BrowserRouter>
   );
 };
 
